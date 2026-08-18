@@ -6,6 +6,8 @@ metadata:
 spec:
   subscriptions:
     - image:
-        repoURL: public.ecr.aws/nginx/nginx
-        constraint: ^1.29.0
-        discoveryLimit: 5
+        repoURL: docker.io/library/nginx
+        constraint: ~1.29.0
+        discoveryLimit: 10
+        imageSelectionStrategy: SemVer
+        strictSemvers: true  

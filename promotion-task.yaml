@@ -10,7 +10,7 @@ spec:
       value: https://github.com/asd99557/kargo-poc.git
 
     - name: imageRepo
-      value: public.ecr.aws/nginx/nginx
+      value: docker.io/library/nginx
 
   steps:
 
