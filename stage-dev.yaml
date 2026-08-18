@@ -1,0 +1,21 @@
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Stage
+metadata:
+  name: dev
+  namespace: kargo-poc
+
+spec:
+  requestedFreight:
+
+    - origin:
+        kind: Warehouse
+        name: myapp
+      sources:
+        direct: true
+
+  promotionTemplate:
+    spec:
+      steps:
+        - task:
+            name: myapp-promotion
+          as: promotion
