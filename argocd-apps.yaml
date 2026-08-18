@@ -1,0 +1,73 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: myapp-dev
+  namespace: argocd
+  annotations:
+    kargo.akuity.io/authorized-stage: kargo-poc:dev
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/asd99557/kargo-poc.git
+    targetRevision: stage/dev
+    path: .
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: myapp-dev
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: myapp-qa
+  namespace: argocd
+  annotations:
+    kargo.akuity.io/authorized-stage: kargo-poc:qa
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/asd99557/kargo-poc.git
+    targetRevision: stage/qa
+    path: .
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: myapp-qa
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: myapp-prod
+  namespace: argocd
+  annotations:
+    kargo.akuity.io/authorized-stage: kargo-poc:prod
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/asd99557/kargo-poc.git
+    targetRevision: stage/prod
+    path: .
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: myapp-prod
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
