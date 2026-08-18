@@ -2,9 +2,9 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - ../warehouse.yaml
-  - ../promotion-task.yaml
-  - ../kargo-project.yaml
-  - ../stage-dev.yaml
-  - ../stage-qa.yaml
-  - ../stage-prod.yaml
+  - warehouse.yaml
+  - promotion-task.yaml
+  - kargo-project.yaml
+  - stage-dev.yaml
+  - stage-qa.yaml
+  - stage-prod.yaml
