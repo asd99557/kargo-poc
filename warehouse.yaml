@@ -7,7 +7,7 @@ spec:
   subscriptions:
     - image:
         repoURL: docker.io/library/nginx
-        constraint: ~1.29.0
+        constraint: ~1.30.0
         discoveryLimit: 10
         imageSelectionStrategy: SemVer
         strictSemvers: true  
