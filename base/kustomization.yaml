@@ -7,4 +7,4 @@ resources:
 
 images:
   - name: public.ecr.aws/nginx/nginx
-    newTag: "1.31.4"
+    newTag: "1.30.1"
