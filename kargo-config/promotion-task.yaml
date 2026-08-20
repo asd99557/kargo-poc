@@ -10,16 +10,12 @@ spec:
     - name: gitopsRepo
       value: https://github.com/asd99557/kargo-poc.git
 
-    - name: imageRepo
-      value: docker.io/library/nginx
-
   steps:
 
     # 1. Checkout the EXACT Git commit contained in the Freight
     - uses: git-clone
       config:
         repoURL: ${{ vars.gitopsRepo }}
-
         checkout:
           - commit: ${{ commitFrom(vars.gitopsRepo).ID }}
             path: ./src
@@ -33,35 +29,25 @@ spec:
       config:
         path: ./out
 
-    # 3. Set the image version from the SAME Freight
-    - uses: kustomize-set-image
-      as: update
-      config:
-        path: ./src/base
-
-        images:
-          - image: ${{ vars.imageRepo }}
-            tag: ${{ imageFrom(vars.imageRepo).Tag }}
-
-    # 4. Build the environment-specific manifests
+    # 3. Build manifests WITHOUT changing the image version
     - uses: kustomize-build
       config:
         path: ./src/stages/${{ ctx.stage }}
         outPath: ./out
 
-    # 5. Commit the promoted configuration
+    # 4. Commit the Git version exactly as it exists in the Freight
     - uses: git-commit
       as: commit
       config:
         path: ./out
-        message: ${{ task.outputs.update.commitMessage }}
+        message: "Promote Git commit ${{ commitFrom(vars.gitopsRepo).ID }} to ${{ ctx.stage }}"
 
-    # 6. Push the environment branch
+    # 5. Push environment branch
     - uses: git-push
       config:
         path: ./out
 
-    # 7. Tell Argo CD to deploy the exact commit generated above
+    # 6. Tell Argo CD to deploy the generated commit
     - uses: argocd-update
       config:
         apps:
