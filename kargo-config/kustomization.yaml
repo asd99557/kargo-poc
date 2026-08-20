@@ -8,3 +8,4 @@ resources:
   - stage-dev.yaml
   - stage-qa.yaml
   - stage-prod.yaml
+  - project-config.yaml

@@ -1,5 +1,6 @@
 apiVersion: kargo.akuity.io/v1alpha1
 kind: PromotionTask
+
 metadata:
   name: myapp-promotion
   namespace: kargo-poc
@@ -14,45 +15,53 @@ spec:
 
   steps:
 
+    # 1. Checkout the EXACT Git commit contained in the Freight
     - uses: git-clone
       config:
         repoURL: ${{ vars.gitopsRepo }}
-        checkout:
 
-          - branch: main
+        checkout:
+          - commit: ${{ commitFrom(vars.gitopsRepo).ID }}
             path: ./src
 
           - branch: stage/${{ ctx.stage }}
             create: true
             path: ./out
 
+    # 2. Clear the existing environment branch
     - uses: git-clear
       config:
         path: ./out
 
+    # 3. Set the image version from the SAME Freight
     - uses: kustomize-set-image
       as: update
       config:
         path: ./src/base
+
         images:
           - image: ${{ vars.imageRepo }}
             tag: ${{ imageFrom(vars.imageRepo).Tag }}
 
+    # 4. Build the environment-specific manifests
     - uses: kustomize-build
       config:
         path: ./src/stages/${{ ctx.stage }}
         outPath: ./out
 
+    # 5. Commit the promoted configuration
     - uses: git-commit
       as: commit
       config:
         path: ./out
         message: ${{ task.outputs.update.commitMessage }}
 
+    # 6. Push the environment branch
     - uses: git-push
       config:
         path: ./out
 
+    # 7. Tell Argo CD to deploy the exact commit generated above
     - uses: argocd-update
       config:
         apps:

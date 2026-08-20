@@ -12,7 +12,8 @@ spec:
         name: myapp
       sources:
         direct: true
-
+        autoPromotionOptions:
+          selectionPolicy: NewestFreight
   promotionTemplate:
     spec:
       steps:
