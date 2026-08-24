@@ -40,7 +40,8 @@ spec:
       as: commit
       config:
         path: ./out
-        message: "Promote Git commit ${{ commitFrom(vars.gitopsRepo).ID }} to ${{ ctx.stage }}"
+        message: Promote Git commit ${{ commitFrom(vars.gitopsRepo).ID }} to ${{
+          ctx.stage }}
 
     # 5. Push environment branch
     - uses: git-push
@@ -55,3 +56,4 @@ spec:
             sources:
               - repoURL: ${{ vars.gitopsRepo }}
                 desiredRevision: ${{ task.outputs.commit.commit }}
+Transform: AWS::Serverless-2016-10-31
