@@ -5,3 +5,11 @@ resources:
   - ../../base
 
 namespace: myapp-prod
+
+replicas:
+  - name: myapp
+    count: 2
+
+images:
+  - name: public.ecr.aws/nginx/nginx
+    newTag: "1.30.1"

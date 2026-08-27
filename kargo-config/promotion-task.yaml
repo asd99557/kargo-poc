@@ -12,43 +12,59 @@ spec:
 
   steps:
 
-    # 1. Checkout the EXACT Git commit contained in the Freight
+    # 1. Checkout the exact Git commit that belongs to the Freight.
+    #    Also checkout the target environment branch.
     - uses: git-clone
       config:
         repoURL: ${{ vars.gitopsRepo }}
         checkout:
+
+          # Source configuration from the Freight
           - commit: ${{ commitFrom(vars.gitopsRepo).ID }}
             path: ./src
 
+          # Environment branch that Argo CD watches
           - branch: stage/${{ ctx.stage }}
             create: true
             path: ./out
 
-    # 2. Clear the existing environment branch
+    # 2. Clear the old contents of stage/<environment>.
     - uses: git-clear
       config:
         path: ./out
 
-    # 3. Build manifests WITHOUT changing the image version
-    - uses: kustomize-build
+    # 3. Copy the application base configuration.
+    - uses: copy
       config:
-        path: ./src/stages/${{ ctx.stage }}
-        outPath: ./out
+        inPath: ./src/base
+        outPath: ./out/base
 
-    # 4. Commit the Git version exactly as it exists in the Freight
+    # 4. Copy the environment-specific Kustomize configuration.
+    #
+    # This preserves:
+    #   replicas
+    #   image
+    #   namespace
+    #   other environment configuration
+    #
+    - uses: copy
+      config:
+        inPath: ./src/stages/${{ ctx.stage }}
+        outPath: ./out/stages/${{ ctx.stage }}
+
+    # 5. Commit the promoted configuration.
     - uses: git-commit
       as: commit
       config:
         path: ./out
-        message: Promote Git commit ${{ commitFrom(vars.gitopsRepo).ID }} to ${{
-          ctx.stage }}
+        message: "Promote Git commit ${{ commitFrom(vars.gitopsRepo).ID }} to ${{ ctx.stage }}"
 
-    # 5. Push environment branch
+    # 6. Push the environment branch.
     - uses: git-push
       config:
         path: ./out
 
-    # 6. Tell Argo CD to deploy the generated commit
+    # 7. Tell Argo CD about the new Git commit.
     - uses: argocd-update
       config:
         apps:
@@ -56,4 +72,3 @@ spec:
             sources:
               - repoURL: ${{ vars.gitopsRepo }}
                 desiredRevision: ${{ task.outputs.commit.commit }}
-Transform: AWS::Serverless-2016-10-31
