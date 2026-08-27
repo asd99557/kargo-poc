@@ -3,21 +3,26 @@ kind: Warehouse
 metadata:
   name: myapp
   namespace: kargo-poc
+
 spec:
   freightCreationPolicy: Automatic
+
   interval: 1m
+
   subscriptions:
-    # watch Docker image
+
+    # Watch container image
     - image:
-        repoURL: docker.io/library/nginx
-        constraint: '>=1.30.0 <2.0.0'
+        repoURL: public.ecr.aws/nginx/nginx
         discoveryLimit: 10
         imageSelectionStrategy: SemVer
-        strictSemvers: true
+        constraint: ">=1.30.0 <2.0.0"
 
+    # Watch Git configuration
     - git:
         repoURL: https://github.com/asd99557/kargo-poc.git
         branch: main
         commitSelectionStrategy: NewestFromBranch
         includePaths:
           - base/
+          - stages/
