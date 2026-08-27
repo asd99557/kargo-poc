@@ -8,4 +8,4 @@ namespace: myapp-dev
 
 replicas:
   - name: myapp
-    count: 2
+    count: 3
