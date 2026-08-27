@@ -11,7 +11,7 @@ spec:
   source:
     repoURL: https://github.com/asd99557/kargo-poc.git
     targetRevision: stage/dev
-    path: .
+    path: stages/dev
 
   destination:
     server: https://kubernetes.default.svc
@@ -36,7 +36,7 @@ spec:
   source:
     repoURL: https://github.com/asd99557/kargo-poc.git
     targetRevision: stage/qa
-    path: .
+    path: stage/qa
 
   destination:
     server: https://kubernetes.default.svc
@@ -61,7 +61,7 @@ spec:
   source:
     repoURL: https://github.com/asd99557/kargo-poc.git
     targetRevision: stage/prod
-    path: .
+    path: stage/prod
 
   destination:
     server: https://kubernetes.default.svc
