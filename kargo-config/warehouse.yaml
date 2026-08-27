@@ -7,13 +7,13 @@ spec:
   freightCreationPolicy: Automatic
   interval: 1m
   subscriptions:
-# watch Docker image
+    # watch Docker image
     - image:
         repoURL: docker.io/library/nginx
-        constraint: ">=1.30.0 <2.0.0"
+        constraint: '>=1.30.0 <2.0.0'
         discoveryLimit: 10
         imageSelectionStrategy: SemVer
-        strictSemvers: true  
+        strictSemvers: true
 
     - git:
         repoURL: https://github.com/asd99557/kargo-poc.git

@@ -5,3 +5,7 @@ resources:
   - ../../base
 
 namespace: myapp-dev
+
+replicas:
+  - name: myapp
+    count: 2
