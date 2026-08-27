@@ -8,7 +8,7 @@ namespace: myapp-dev
 
 replicas:
   - name: myapp
-    count: 4
+    count: 5
 
 images:
   - name: public.ecr.aws/nginx/nginx
