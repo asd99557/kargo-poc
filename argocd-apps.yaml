@@ -35,8 +35,8 @@ spec:
 
   source:
     repoURL: https://github.com/asd99557/kargo-poc.git
-    targetRevision: stages/qa
-    path: stage/qa
+    targetRevision: stage/qa
+    path: stages/qa
 
   destination:
     server: https://kubernetes.default.svc
