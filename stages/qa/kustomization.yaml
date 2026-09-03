@@ -8,7 +8,7 @@ namespace: myapp-qa
 
 replicas:
   - name: myapp
-    count: 2
+    count: 4
 
 images:
   - name: public.ecr.aws/nginx/nginx
